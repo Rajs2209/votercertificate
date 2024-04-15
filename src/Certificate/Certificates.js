@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
 
 const Certificates = () => {
     const { name, option, UniqueId } = useParams();
@@ -28,14 +29,17 @@ const Certificates = () => {
                 window.print();
             }
             setPrinted(false);
-
         };
     }, [name, option, UniqueId, printed]);
 
     return (
-        <div>
-            <canvas ref={canvasRef} style={{ display: 'block', margin: 'auto', height: '80vh', width: '80%' }}></canvas>
-        </div>
+        <Container fluid>
+            <Row>
+                <Col xs={12} className="d-flex justify-content-center">
+                    <canvas ref={canvasRef} style={{ maxWidth: '80%', height: 'auto' }}></canvas>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 
