@@ -1,42 +1,49 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
 const Certificates = () => {
     const { name, option, UniqueId } = useParams();
     const canvasRef = useRef(null);
-    const [printed, setPrinted] = useState(false);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         const img = new Image();
-        img.src = '/certificateimage.png';
+        img.src = '/certificatesimage.png';
 
         img.onload = () => {
             canvas.width = img.width;
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            ctx.font = 'bold 40px Arial';
+            ctx.font = 'bold 37px Arial';
             ctx.fillStyle = 'black';
             ctx.textAlign = 'center';
-            ctx.fillText(name, 1313, 705);
-            ctx.fillText(option, 637, 784);
-            ctx.fillText(UniqueId, 450, 40);
-
-            if (!printed) {
-                setPrinted(true);
-                window.print();
-            }
-            setPrinted(false);
+            ctx.fillText(name, 1401, 703);
+            ctx.fillText(option, 667, 778);
+            ctx.fillText(UniqueId, 420, 41);
         };
-    }, [name, option, UniqueId, printed]);
+    }, [name, option, UniqueId]);
+
+    const handleDownload = () => {
+        const canvas = canvasRef.current;
+        const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+        const link = document.createElement('a');
+        link.download = 'certificate.png';
+        link.href = image;
+        link.click();
+    };
 
     return (
         <Container fluid>
             <Row>
                 <Col xs={12} className="d-flex justify-content-center">
-                    <canvas ref={canvasRef} style={{ maxWidth: '80%', height: 'auto' }}></canvas>
+                    <canvas ref={canvasRef} style={{ maxWidth: '60%', height: 'auto' }}></canvas>
+                </Col>
+            </Row>
+            <Row>
+                <Col xs={12} className="d-flex justify-content-center mt-3">
+                    <Button onClick={handleDownload}>Download Certificate</Button>
                 </Col>
             </Row>
         </Container>

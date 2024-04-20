@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Formuser = () => {
     const [formData, setFormData] = useState({
@@ -8,22 +9,33 @@ const Formuser = () => {
         phone: '',
         option: '',
     });
-    const [counts, setCounts] = useState(() => {
-        const localCounts = localStorage.getItem('counts');
-        return localCounts ? JSON.parse(localCounts) : {
-            राजमहल: 0,
-            बोरिया: 0,
-            बरहेट: 0
-        };
+
+    const [counts, setCounts] = useState({
+        राजमहल: 0,
+        बोरिया: 0,
+        बरहेट: 0
     });
 
     const [checkbox, setCheckbox] = useState(false);
-    const [submittedData, setSubmittedData] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        localStorage.setItem('counts', JSON.stringify(counts));
-    }, [counts]);
+        const fetchData = async () => {
+            const response = await axios.get('http://localhost:8000/get-counts');
+            if (response.status === 200) {
+                const initialCounts = {
+                    राजमहल: 0,
+                    बोरिया: 0,
+                    बरहेट: 0
+                };
+                setCounts(prevCounts => ({
+                    ...initialCounts,
+                    ...response.data
+                }));
+            }
+        };
+        fetchData();
+    }, []);
 
     const handleInput = (e) => {
         const { name, value } = e.target;
@@ -35,29 +47,30 @@ const Formuser = () => {
         setCheckbox(!checkbox);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (checkbox) {
-            const existingData = submittedData.find(item => item.name === formData.name && item.phone === formData.phone && item.option === formData.option);
-            if (!existingData) {
-                navigate(`/certificate/${formData.name}/${formData.option}/${formData.UniqueId}`)
-                setCounts(prevCounts => ({
-                    ...prevCounts,
-                    [formData.option]: prevCounts[formData.option] + 1
-                }));
-                setSubmittedData([...submittedData, { name: formData.name, phone: formData.phone, option: formData.option }]);
-
-                localStorage.setItem('counts', JSON.stringify({
-                    ...counts,
-                    [formData.option]: counts[formData.option] + 1
-                }));
-            } else {
-                window.alert('already exist');
+            try {
+                const response = await axios.post("http://localhost:8000/submit-form", formData);
+                if (response.status === 200) {
+                    setCounts((prevCounts) => ({
+                        ...prevCounts,
+                        [formData.option]: prevCounts[formData.option] + 1,
+                    }));
+                    navigate(`/certificate/${formData.name}/${formData.option}/${formData.UniqueId}`);
+                } else {
+                    console.error('Error:', response.statusText);
+                    window.alert('An error occurred');
+                }
+            } catch (err) {
+                console.error('Error:', err.message);
+                window.alert('An error occurred');
             }
         } else {
             window.alert('Please enter your name and check the box before submitting.');
         }
     };
+
 
 
     return (
@@ -123,25 +136,23 @@ const Formuser = () => {
                                 </button>
                             </div>
                         </form>
-                        <div class="col" >
+                        <div className="col">
                             <h6 style={{ textAlign: 'start' }}>कुल नागरिक जिनके द्वारा संकल्प पत्र भरा गया है। </h6>
                             <h6 style={{ textAlign: 'center' }}>{Object.values(counts).reduce((a, b) => a + b, 0)}</h6>
-                            <div class="container" >
-                                <div class="row row-cols-2" >
-                                    <div class="col border border-primary border-5 p-4 m-3" >
-                                        <h3 style={{ textAlign: 'center' }}>राजमहल <h3 style={{ textAlign: 'center' }}>{counts['राजमहल']}</h3></h3></div>
-                                    <div class="col border border-primary border-5 p-4 m-3">
-                                        <h3 style={{ textAlign: 'center' }}>बोरिया<h3 style={{ textAlign: 'center' }}>{counts['बोरिया']}</h3></h3></div>
-                                    <div class="col border border-primary border-5 p-4 m-3">
-                                        <h3 style={{ textAlign: 'center' }}>बरहेट <h3 style={{ textAlign: 'center' }}>{counts['बरहेट']}</h3></h3></div>
-
+                            <div className="container">
+                                <div className="row row-cols-2">
+                                    {Object.entries(counts).map(([option, count]) => (
+                                        <div key={option} className="col border border-primary border-5 p-4 m-3">
+                                            <h3 style={{ textAlign: 'center' }}>{option}</h3>
+                                            <h3 style={{ textAlign: 'center' }}>{count}</h3>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
-                </div >
+                </div>
             </div>
 
 
