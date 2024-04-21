@@ -21,7 +21,7 @@ const Formuser = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get('http://localhost:8000/get-counts');
+            const response = await axios.get('https://voterbackend.vercel.app/get-counts');
             if (response.status === 200) {
                 const initialCounts = {
                     राजमहल: 0,
@@ -51,7 +51,7 @@ const Formuser = () => {
         e.preventDefault();
         if (checkbox) {
             try {
-                const response = await axios.post("http://localhost:8000/submit-form", formData);
+                const response = await axios.post("https://voterbackend.vercel.app/submit-form", formData);
                 if (response.status === 200) {
                     setCounts((prevCounts) => ({
                         ...prevCounts,
