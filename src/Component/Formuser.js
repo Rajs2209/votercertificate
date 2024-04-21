@@ -21,17 +21,13 @@ const Formuser = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get('https://voterbackend.vercel.app/get-counts');
-            if (response.status === 200) {
-                const initialCounts = {
-                    राजमहल: 0,
-                    बोरिया: 0,
-                    बरहेट: 0
-                };
-                setCounts(prevCounts => ({
-                    ...initialCounts,
-                    ...response.data
-                }));
+            try {
+                const response = await axios.get('https://voterbackend.vercel.app/get-counts');
+                if (response.status === 200) {
+                    setCounts(response.data);
+                }
+            } catch (err) {
+                console.error('Error fetching counts:', err);
             }
         };
         fetchData();
