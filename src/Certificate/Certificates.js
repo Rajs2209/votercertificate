@@ -1,10 +1,28 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
 const Certificates = () => {
     const { name, option, UniqueId } = useParams();
     const canvasRef = useRef(null);
+    const [maxWidth, setMaxWidth] = useState('100%');
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                setMaxWidth('60%');
+            } else {
+                setMaxWidth('100%');
+            }
+        };
+
+        handleResize(); // Set initial maxWidth based on window width
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -38,7 +56,7 @@ const Certificates = () => {
         <Container fluid>
             <Row>
                 <Col xs={12} className="d-flex justify-content-center">
-                    <canvas ref={canvasRef} style={{ maxWidth: '60%', height: 'auto' }}></canvas>
+                    <canvas ref={canvasRef} style={{ maxWidth: maxWidth, height: 'auto' }}></canvas>
                 </Col>
             </Row>
             <Row>
