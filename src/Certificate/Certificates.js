@@ -12,11 +12,11 @@ const Certificates = () => {
             if (window.innerWidth >= 768) {
                 setMaxWidth('60%');
             } else {
-                setMaxWidth('100%');
+                setMaxWidth('105%');
             }
         };
 
-        handleResize(); // Set initial maxWidth based on window width
+        handleResize();
 
         window.addEventListener('resize', handleResize);
         return () => {
@@ -34,10 +34,10 @@ const Certificates = () => {
             canvas.width = img.width;
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            ctx.font = 'bold 37px Arial';
+            ctx.font = 'bold 40px Arial';
             ctx.fillStyle = 'black';
             ctx.textAlign = 'center';
-            ctx.fillText(name, 1401, 703);
+            ctx.fillText(name, 1401, 705);
             ctx.fillText(option, 667, 778);
             ctx.fillText(UniqueId, 420, 41);
         };
