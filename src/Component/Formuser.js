@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import apiurl from '../Api/api';
 
 const Formuser = () => {
     const [formData, setFormData] = useState({
@@ -22,7 +21,7 @@ const Formuser = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get('apiurl/get-counts');
+            const response = await axios.get('https://voterbackend.vercel.app/get-counts');
             if (response.status === 200) {
                 const initialCounts = {
                     राजमहल: 0,
@@ -52,7 +51,7 @@ const Formuser = () => {
         e.preventDefault();
         if (checkbox) {
             try {
-                const response = await axios.post("apiurl/submit-form", formData);
+                const response = await axios.post("https://voterbackend.vercel.app/submit-form", formData);
                 if (response.status === 200) {
                     setCounts((prevCounts) => ({
                         ...prevCounts,
