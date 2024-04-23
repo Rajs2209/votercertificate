@@ -12,7 +12,7 @@ const Formuser = () => {
 
     const [counts, setCounts] = useState({
         राजमहल: 0,
-        बोरिया: 0,
+        बोरियों: 0,
         बरहेट: 0
     });
 
@@ -25,17 +25,27 @@ const Formuser = () => {
             if (response.status === 200) {
                 const initialCounts = {
                     राजमहल: 0,
-                    बोरिया: 0,
+                    बोरियों: 0,
                     बरहेट: 0
                 };
-                setCounts(prevCounts => ({
-                    ...initialCounts,
-                    ...response.data
-                }));
+
+                const correctedOptions = {
+                    बोरिया: 'बोरियों'
+                };
+
+                const updatedCounts = { ...initialCounts };
+
+                for (const key in response.data) {
+                    const correctedKey = correctedOptions[key] || key;
+                    updatedCounts[correctedKey] = response.data[key];
+                }
+
+                setCounts(updatedCounts);
             }
         };
         fetchData();
     }, []);
+
 
     const handleInput = (e) => {
         const { name, value } = e.target;
@@ -53,11 +63,15 @@ const Formuser = () => {
             try {
                 const response = await axios.post("https://voterbackend.vercel.app/submit-form", formData);
                 if (response.status === 200) {
-                    setCounts((prevCounts) => ({
-                        ...prevCounts,
-                        [formData.option]: prevCounts[formData.option] + 1,
-                    }));
-                    navigate(`/certificate/${formData.name}/${formData.option}/${formData.UniqueId}`);
+                    if (response.data.exists) {
+                        window.alert('Name and phone number combination already exists.');
+                    } else {
+                        setCounts((prevCounts) => ({
+                            ...prevCounts,
+                            [formData.option]: prevCounts[formData.option] + 1,
+                        }));
+                        navigate(`/certificate/${formData.name}/${formData.option}/${formData.UniqueId}`);
+                    }
                 } else {
                     console.error('Error:', response.statusText);
                     window.alert('An error occurred');
@@ -88,7 +102,7 @@ const Formuser = () => {
                                 <select id="inputState" className="my-2 p-2 w-75" name="option" onChange={handleInput}>
                                     <option selected>--विधानसभा क्षेत्र--</option>
                                     <option>राजमहल</option>
-                                    <option>बोरिया</option>
+                                    <option>बोरियों</option>
                                     <option>बरहेट</option>
                                 </select>
                             </div>
@@ -141,12 +155,15 @@ const Formuser = () => {
                             <h6 style={{ textAlign: 'center' }}>{Object.values(counts).reduce((a, b) => a + b, 0)}</h6>
                             <div className="container">
                                 <div className="row row-cols-2">
-                                    {Object.entries(counts).map(([option, count]) => (
-                                        <div key={option} className="col border border-primary border-5 p-4 m-3">
-                                            <h3 style={{ textAlign: 'center' }}>{option}</h3>
-                                            <h3 style={{ textAlign: 'center' }}>{count}</h3>
-                                        </div>
-                                    ))}
+                                    {Object.entries(counts)
+                                        .filter(([option, count]) => count > 0 && ['राजमहल', 'बोरियों', 'बरहेट'].includes(option))
+                                        .map(([option, count]) => (
+                                            <div key={option} className="col border border-primary border-5 p-4 m-3">
+                                                <h3 style={{ textAlign: 'center' }}>{option}</h3>
+                                                <h3 style={{ textAlign: 'center' }}>{count}</h3>
+                                            </div>
+                                        ))}
+
                                 </div>
                             </div>
                         </div>
