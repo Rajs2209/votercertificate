@@ -59,6 +59,18 @@ const Formuser = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (formData.option.trim() === '') {
+            window.alert('कृपया विधानसभा विकल्प चुनें।');
+            return;
+        }
+        if (formData.name.trim() === '') {
+            window.alert('कृपया अपना नाम दर्ज करें।');
+            return;
+        }
+        if (formData.phone.trim() === '' || formData.phone.trim().length !== 10 || isNaN(formData.phone.trim())) {
+            window.alert('कृपया 10 अंकों का मोबाइल नंबर दर्ज करें।');
+            return;
+        }
         if (checkbox) {
             try {
                 const response = await axios.post("https://voterbackend.vercel.app/submit-form", formData);
@@ -71,7 +83,7 @@ const Formuser = () => {
                         }));
                         navigate(`/certificate/${formData.name}/${formData.option}/${formData.UniqueId}`);
                     } else {
-                        window.alert('Name and phone number combination already exists.');
+                        window.alert('नाम और फोन नंबर का संयोजन पहले से मौजूद है।');
                     }
                 } else {
                     console.error('Error:', response.statusText);
@@ -82,7 +94,7 @@ const Formuser = () => {
                 window.alert('An error occurred');
             }
         } else {
-            window.alert('Please enter your name and check the box before submitting.');
+            window.alert('कृपया सबमिट करने से पहले बॉक्स पर टिक करें।');
         }
     };
 
@@ -100,13 +112,14 @@ const Formuser = () => {
                             </div>
 
                             <div>
-                                <select id="inputState" className="my-2 p-2 w-75" name="option" onChange={handleInput}>
-                                    <option selected>--विधानसभा क्षेत्र--</option>
-                                    <option>राजमहल</option>
-                                    <option>बोरियों</option>
-                                    <option>बरहेट</option>
+                                <select id="inputState" className="my-2 p-2 w-75" name="option" onChange={handleInput} value={formData.option}>
+                                    <option value="" disabled>--विधानसभा क्षेत्र--</option>
+                                    <option value="राजमहल">राजमहल</option>
+                                    <option value="बोरियों">बोरियों</option>
+                                    <option value="बरहेट">बरहेट</option>
                                 </select>
                             </div>
+
                             <div>
                                 <input
                                     className="my-2 p-2 w-75"
