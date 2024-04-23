@@ -63,14 +63,15 @@ const Formuser = () => {
             try {
                 const response = await axios.post("https://voterbackend.vercel.app/submit-form", formData);
                 if (response.status === 200) {
-                    if (response.data.exists) {
-                        window.alert('Name and phone number combination already exists.');
-                    } else {
+                    const { exists } = response.data;
+                    if (!exists) {
                         setCounts((prevCounts) => ({
                             ...prevCounts,
                             [formData.option]: prevCounts[formData.option] + 1,
                         }));
                         navigate(`/certificate/${formData.name}/${formData.option}/${formData.UniqueId}`);
+                    } else {
+                        window.alert('Name and phone number combination already exists.');
                     }
                 } else {
                     console.error('Error:', response.statusText);
