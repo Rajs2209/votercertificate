@@ -10,7 +10,7 @@ const Certificates = () => {
 
     useEffect(() => {
         const img = new Image();
-        img.src = '/certificatesimage.png';
+        img.src = '/sbgnewimage.png';
         img.onload = () => {
             setImageLoaded(true);
         };
@@ -22,7 +22,7 @@ const Certificates = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         const img = new Image();
-        img.src = '/certificatesimage.png';
+        img.src = '/sbgnewimage.png';
 
         canvas.width = img.width;
         canvas.height = img.height;
