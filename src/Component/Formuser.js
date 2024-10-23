@@ -30,7 +30,7 @@ const Formuser = () => {
                 };
 
                 const correctedOptions = {
-                    बोरिया: '02-बोरियों'
+                    बोरिया: 'बोरियों'
                 };
 
                 const updatedCounts = { ...initialCounts };
@@ -114,9 +114,9 @@ const Formuser = () => {
                             <div>
                                 <select id="inputState" className="my-2 p-2 w-75" name="option" onChange={handleInput} value={formData.option}>
                                     <option value="" disabled>--विधानसभा क्षेत्र--</option>
-                                    <option value="01-राजमहल">01 - राजमहल </option>
-                                    <option value="02-बोरियों">02 - बोरियो (अ०ज०जा०)</option>
-                                    <option value="03-बरहेट">03 - बरहेट (अ०ज०जा०)</option>
+                                    <option value="राजमहल">01 - राजमहल </option>
+                                    <option value="बोरियों">02 - बोरियो (अ०ज०जा०)</option>
+                                    <option value="बरहेट">03 - बरहेट (अ०ज०जा०)</option>
                                 </select>
                             </div>
 
@@ -170,7 +170,7 @@ const Formuser = () => {
                             <div className="container">
                                 <div className="row row-cols-2">
                                     {Object.entries(counts)
-                                        .filter(([option, count]) => count > 0 && ['01-राजमहल', '02-बोरियों', '03-बरहेट'].includes(option))
+                                        .filter(([option, count]) => count > 0 && ['राजमहल', 'बोरियों', 'बरहेट'].includes(option))
                                         .map(([option, count]) => (
                                             <div key={option} className="col border border-primary border-5 p-4 m-3">
                                                 <h3 style={{ textAlign: 'center' }}>{option}</h3>

@@ -24,7 +24,7 @@ const Certificates = () => {
         const img = new Image();
         img.src = '/final.png';
 
-        canvas.width = img.width;
+        canvas.width =img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         ctx.font = 'bold 40px Arial';
