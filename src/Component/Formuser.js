@@ -30,7 +30,7 @@ const Formuser = () => {
                 };
 
                 const correctedOptions = {
-                    बोरिया: 'बोरियों'
+                    बोरिया: '02-बोरियों'
                 };
 
                 const updatedCounts = { ...initialCounts };
@@ -170,7 +170,7 @@ const Formuser = () => {
                             <div className="container">
                                 <div className="row row-cols-2">
                                     {Object.entries(counts)
-                                        .filter(([option, count]) => count > 0 && ['राजमहल', 'बोरियों', 'बरहेट'].includes(option))
+                                        .filter(([option, count]) => count > 0 && ['01-राजमहल', '02-बोरियों', '03-बरहेट'].includes(option))
                                         .map(([option, count]) => (
                                             <div key={option} className="col border border-primary border-5 p-4 m-3">
                                                 <h3 style={{ textAlign: 'center' }}>{option}</h3>
