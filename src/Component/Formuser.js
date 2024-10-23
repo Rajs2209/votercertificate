@@ -21,7 +21,7 @@ const Formuser = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get('https://voterbackend.vercel.app/get-counts');
+            const response = await axios.get('https://votercertificate.vercel.app/get-counts');
             if (response.status === 200) {
                 const initialCounts = {
                     राजमहल: 0,
@@ -36,7 +36,9 @@ const Formuser = () => {
                 const updatedCounts = { ...initialCounts };
 
                 for (const key in response.data) {
-                    const correctedKey = correctedOptions[key] || key;
+                    let arr=[];
+                    arr=key.split("-");
+                    const correctedKey = correctedOptions[arr[1]] || arr[1];
                     updatedCounts[correctedKey] = response.data[key];
                 }
 
@@ -73,7 +75,7 @@ const Formuser = () => {
         }
         if (checkbox) {
             try {
-                const response = await axios.post("https://voterbackend.vercel.app/submit-form", formData);
+                const response = await axios.post("https://votercertificate.vercel.app/submit-form", formData);
                 if (response.status === 200) {
                     const { exists } = response.data;
                     if (!exists) {
@@ -114,9 +116,9 @@ const Formuser = () => {
                             <div>
                                 <select id="inputState" className="my-2 p-2 w-75" name="option" onChange={handleInput} value={formData.option}>
                                     <option value="" disabled>--विधानसभा क्षेत्र--</option>
-                                    <option value="राजमहल">01 - राजमहल </option>
-                                    <option value="बोरियों">02 - बोरियो (अ०ज०जा०)</option>
-                                    <option value="बरहेट">03 - बरहेट (अ०ज०जा०)</option>
+                                    <option value="01-राजमहल">01 - राजमहल </option>
+                                    <option value="02-बोरियों">02 - बोरियो (अ०ज०जा०)</option>
+                                    <option value="03-बरहेट">03 - बरहेट (अ०ज०जा०)</option>
                                 </select>
                             </div>
 
