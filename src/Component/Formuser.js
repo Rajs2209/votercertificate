@@ -114,9 +114,9 @@ const Formuser = () => {
                             <div>
                                 <select id="inputState" className="my-2 p-2 w-75" name="option" onChange={handleInput} value={formData.option}>
                                     <option value="" disabled>--विधानसभा क्षेत्र--</option>
-                                    <option value="राजमहल">राजमहल</option>
-                                    <option value="बोरियों">बोरियों</option>
-                                    <option value="बरहेट">बरहेट</option>
+                                    <option value="राजमहल">01 - राजमहल </option>
+                                    <option value="बोरियों">02 - बोरियो (अ०ज०जा०)</option>
+                                    <option value="बरहेट">03 - बरहेट (अ०ज०जा०)</option>
                                 </select>
                             </div>
 
